@@ -7,7 +7,8 @@
                  [org.clojure/clojurescript "0.0-2505"]
                  [ring-server "0.3.1"]
                  [tailrecursion/javelin "3.7.1"]
-                 [enfocus "2.1.1"]]
+                 [enfocus "2.1.1"]
+                 [org.clojars.franks42/cljs-uuid-utils "0.1.3"]]
   :plugins [[lein-ring "0.8.12"]
             [lein-cljsbuild "1.0.4-SNAPSHOT"]]
   :cljsbuild {:builds [

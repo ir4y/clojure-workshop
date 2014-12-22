@@ -8,3 +8,7 @@ h1 {
     text-align: center;
 }
 
+li.done{
+    text-decoration: line-through;
+}
+
