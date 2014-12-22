@@ -11,3 +11,5 @@ pom.xml
 .lein-env
 resources/public/js/main.js
 .lein-repl-history
+.nrepl-port
+*.swp

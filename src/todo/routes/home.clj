@@ -3,7 +3,7 @@
             [todo.views.layout :as layout]))
 
 (defn home []
-  (layout/common [:h1 "Hello World!"]))
+  (layout/todo-template))
 
 (defroutes home-routes
   (GET "/" [] (home)))

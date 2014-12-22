@@ -6,16 +6,27 @@
   (:require-macros [tailrecursion.javelin :refer [cell=]]
                    [enfocus.macros :as em]))
 
-(def a (cell "None"))
+(defn todo-list [items]
+  (ef/html [:ul 
+            (for [item items]
+              [:li item])]))
 
-(defn header [text]
-  (ef/html [:div
-            [:h1 text]]))
+(def todo-list-data (cell []))
 
 (cell= (ef/at js/document
-              ["body"] (ef/content (header a))))
+              ["div.todo"] (ef/content (todo-list todo-list-data))))
+
+
+(em/defaction change []
+    ["#add_button"] (let [todo-text (ef/from "#todo_text" (ef/get-prop :value))]
+                      (swap! todo-list-data 
+                             (fn [lst] (conj lst todo-text)))
+                      (ef/at "#todo_text" (ef/set-prop :value ""))))
+
+(em/defaction setup []
+    ["#add_button"] (events/listen :click change))
 
 (defn start []
-  (swap! a (fn [old] "Hello enfocus !!!")))
+  (setup))
 
 (set! (.-onload js/window) start)
