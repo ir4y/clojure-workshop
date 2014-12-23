@@ -63,6 +63,17 @@
     ["#add_button"] (events/listen :click change))
 
 (defn start []
-  (setup))
+  (swap! todo-list-data 
+           (fn [lst] [ {:checked false
+                        :id (uuid-string (make-random-uuid))
+                        :text "Start workshop"}
+                       {:checked false
+                        :id (uuid-string (make-random-uuid))
+                        :text "Show how clojure work"}
+                       {:checked false
+                        :id (uuid-string (make-random-uuid))
+                        :text "Show repl power"}]))
+    (setup))
+
 
 (set! (.-onload js/window) start)
