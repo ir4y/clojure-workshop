@@ -29,14 +29,13 @@
 (defn check [event]
   (let [checkbox (.-currentTarget event)
         uuid (ef/from checkbox (ef/get-attr :data-rel))
-        is_checked (ef/from checkbox (ef/get-attr :checked))]
-    (.log js/console "done")))
-        
-        ;(swap! todo-list-data 
-               ;(fn [lst] 
-                 ;(conj (filter #(not= (:id %) uuid) lst))))))
-
-
+        checked (ef/from checkbox (ef/get-attr :checked))
+        is_checked (not (= "checked" checked))]
+    (swap! todo-list-data 
+           (fn [lst] (map #(if (= (:id %) uuid)
+                             (assoc % :checked is_checked)
+                             %)
+                          lst)))))
 
 
 (em/defaction setup-delete []
