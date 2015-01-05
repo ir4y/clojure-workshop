@@ -2,7 +2,6 @@
   (:require [enfocus.core :as ef]
             [enfocus.events :as events]
             [enfocus.effects :as effects]
-            [tailrecursion.javelin :refer [cell]]
             [cljs-uuid-utils :refer [make-random-uuid uuid-string]])
   (:require-macros [enfocus.macros :as em]))
 
