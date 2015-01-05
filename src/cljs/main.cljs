@@ -83,6 +83,13 @@
 
 (set! (.-onload js/window) start)
 
-
 ;; TODO Use functions from workshop like active-todo ans others
+
 ;; TODO Add handle for hit 'Enter' at input#todo_text. It should add new todo.
+;;      Event name is :keypress
+;;      Event has attr .-keyCode
+;;      Enter key-code is 13
+
+
+;; TODO High level task
+;;      Render count of active and done todo under todo-list
