@@ -1,4 +1,4 @@
-(ns todo.main
+ todo.main
   (:require [enfocus.core :as ef]
             [enfocus.events :as events]
             [enfocus.effects :as effects]
@@ -14,9 +14,9 @@
   (ef/html [:ul 
             (for [item items]
               [:li {:class (if (:checked item) "done" "in-progress")}
-                   [:input (merge {:type "checkbox" 
+                   [:input (merge {:type "checkbox"
                                    :class "check_todo"
-                                   :id (str "checkbox_" (:id item)) 
+                                   :id (str "checkbox_" (:id item))
                                    :data-rel (:id item)}
                                   (if (:checked item)
                                     {:checked "checked"}
@@ -26,18 +26,20 @@
 
 (defn delete-todo [event]
   ;; TODO Add higher-order functions
-  ;;      for generetiong (= (:id %) uuid) predicate
-  (let [button (.-currentTarget event) 
+  ;;      for generetiong (not= (:id %) uuid) predicate
+  (let [button (.-currentTarget event)
         uuid (ef/from button (ef/get-attr :data-rel))]
-        (swap! todo-state (partial remove #(= (:id %) uuid)))))
+        (swap! todo-state (partial filterv #(not= (:id %) uuid)))))
 
 (defn check-todo [event]
-  ;; TODO Use previosly higher-order function
+  ;; TODO Add higher-order functions
+  ;;      for generetiong (= (:id %) uuid) predicate
+  ;;      use complement
   (let [checkbox (.-currentTarget event)
         uuid (ef/from checkbox (ef/get-attr :data-rel))
         checked (ef/from checkbox (ef/get-attr :checked))
         is_checked (not (= "checked" checked))]
-    (swap! todo-state (partial map #(if (= (:id %) uuid)
+    (swap! todo-state (partial mapv #(if (= (:id %) uuid)
                                       (assoc % :checked is_checked)
                                       %)))))
 
@@ -47,11 +49,10 @@
 
 (defn render-todo [todo-list]
   (do
-    (ef/at js/document
-           ["div.todo"] (ef/content (todo-block todo-list)))
+    (ef/at ["div.todo"] (ef/content (todo-block todo-list)))
     (setup-todo-actions)))
 
-(add-watch todo-state nil 
+(add-watch todo-state nil
   (fn[_ _ _ todo-list] (render-todo todo-list)))
 
 (defn get-uuid []
