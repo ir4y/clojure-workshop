@@ -27,7 +27,7 @@
   ;;      for generetiong (not= (:id %) uuid) predicate
   (let [button (.-currentTarget event)
         uuid (ef/from button (ef/get-attr :data-rel))]
-    (swap! todo-state (partial filterv #(not= (:id %) uuid)))))
+    (swap! todo-state (partial filterv #(not= (str (:id %)) uuid)))))
 
 (defn check-todo [event]
   ;; TODO Add higher-order functions
