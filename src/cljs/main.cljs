@@ -1,8 +1,6 @@
  (ns todo.main
   (:require [enfocus.core :as ef]
-            [enfocus.events :as events]
-            [enfocus.effects :as effects]
-            [cljs-uuid-utils :refer [make-random-uuid uuid-string]])
+            [enfocus.events :as events])
   (:require-macros [enfocus.macros :as em]))
 
 
@@ -29,7 +27,7 @@
   ;;      for generetiong (not= (:id %) uuid) predicate
   (let [button (.-currentTarget event)
         uuid (ef/from button (ef/get-attr :data-rel))]
-        (swap! todo-state (partial filterv #(not= (:id %) uuid)))))
+    (swap! todo-state (partial filterv #(not= (:id %) uuid)))))
 
 (defn check-todo [event]
   ;; TODO Add higher-order functions
@@ -39,47 +37,37 @@
         uuid (ef/from checkbox (ef/get-attr :data-rel))
         checked (ef/from checkbox (ef/get-attr :checked))
         is_checked (not (= "checked" checked))]
-    (swap! todo-state (partial mapv #(if (= (:id %) uuid)
+    (swap! todo-state (partial mapv #(if (= (str (:id %)) uuid)
                                       (assoc % :checked is_checked)
                                       %)))))
 
-(em/defaction setup-todo-actions []
-  [".del_button"] (events/listen :click delete-todo)
-  [".check_todo"] (events/listen :click check-todo))
-
 (defn render-todo [todo-list]
-  (do
     (ef/at ["div.todo"] (ef/content (todo-block todo-list)))
-    (setup-todo-actions)))
+    (ef/at [".del_button"] (events/listen :click delete-todo))
+    (ef/at [".check_todo"] (events/listen :click check-todo)))
 
 (add-watch todo-state nil
   (fn[_ _ _ todo-list] (render-todo todo-list)))
 
-(defn get-uuid []
-  (uuid-string (make-random-uuid)))
-
 (defn add-todo []
   (let [todo-text (ef/from "#todo_text" (ef/get-prop :value))
         todo-item {:checked false
-                   :id (get-uuid)
+                   :id (rand-int 1000)
                    :text todo-text}]
     (swap! todo-state #(conj % todo-item))
     (ef/at "#todo_text" (ef/set-prop :value ""))))
 
-(em/defaction setup-add-action []
-    ["#add_button"] (events/listen :click add-todo))
-
 (defn start []
   (reset! todo-state [{:checked false
-                       :id (get-uuid)
+                       :id (rand-int 1000)
                        :text "Start workshop"}
                       {:checked false
-                       :id (get-uuid)
+                       :id (rand-int 1000)
                        :text "Show how clojure work"}
                       {:checked false
-                       :id (get-uuid)
+                       :id (rand-int 1000)
                        :text "Show repl power"}])
-    (setup-add-action))
+  (ef/at ["#add_button"] (events/listen :click add-todo)))
 
 (set! (.-onload js/window) start)
 
@@ -89,7 +77,6 @@
 ;;      Event name is :keypress
 ;;      Event has attr .-keyCode
 ;;      Enter key-code is 13
-
 
 ;; TODO High level task
 ;;      Render count of active and done todo under todo-list
