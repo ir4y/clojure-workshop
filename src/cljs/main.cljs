@@ -1,4 +1,4 @@
- (ns todo.main
+(ns todo.main
   (:require [enfocus.core :as ef]
             [enfocus.events :as events])
   (:require-macros [enfocus.macros :as em]))
@@ -9,7 +9,7 @@
 (defn todo-block [items]
   ;; TODO move (:id item) to :let param
   ;;      https://clojuredocs.org/clojure.core/for
-  (ef/html [:ul 
+  (ef/html [:ul
             (for [item items]
               [:li {:class (if (:checked item) "done" "in-progress")}
                    [:input (merge {:type "checkbox"
@@ -80,3 +80,35 @@
 
 ;; TODO High level task
 ;;      Render count of active and done todo under todo-list
+
+(defn bootstrap-todo [id checked text]
+  {:checked checked
+   :id id
+   :text text})
+
+(defn new-todo [checked text]
+  (let [id (rand-int 1000)]
+    (bootstrap-todo id checked text)))
+
+(def active-todo (partial new-todo false))
+(def done-todo (partial new-todo true))
+
+(def done? :checked)
+(def active? (complement done?))
+
+(defn get-todo-generator [create-todo]
+  (fn [& texts]
+    (map create-todo texts)))
+
+(def active-todo-generator (get-todo-generator active-todo))
+(def done-todo-generator (get-todo-generator done-todo))
+
+(def random-todo-generator (get-todo-generator #(new-todo (= 0 (rand-int 2)) %)))
+
+(def text "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")
+
+(def random-todo-texts (clojure.string/split text #"\s"))
+
+(comment
+  (reset! todo-state  (apply random-todo-generator random-todo-texts))
+)
