@@ -1,19 +1,11 @@
-# todo
+# Воркшоп по функциональному программированию на clojure
 
-FIXME
+В воркшопе рассматриваются:  
+* основы синтаксиса  
+* основный функции манипулирования коллекциями  
+* пример приложение на clojure script реализующее todo-list
 
-## Prerequisites
+Видеоинструкция по настройке среды разработки http://www.youtube.com/watch?v=eDLbSIYod7Y   
+Видео с записью воркшопа http://www.youtube.com/watch?v=ptz5dPinw9s
 
-You will need [Leiningen][1] 1.7.0 or above installed.
-
-[1]: https://github.com/technomancy/leiningen
-
-## Running
-
-To start a web server for the application, run:
-
-    lein ring server
-
-## License
-
-Copyright © 2014 FIXME
+Исходный код todo библиотеки разработанной во второй части воркшопа уже вставлен в файл с исходным текстом после коментариев с заданием.
